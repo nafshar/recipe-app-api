@@ -33,6 +33,6 @@ class CommandTests(SimpleTestCase):
         patched_check.side_effect = [Psycopg2Error] * 2 + \
             [OperationalError] * 3 + [True]
 
-        self.assertEqual(patched_check.call_count, 6) # 6 times from above.
+        self.assertEqual(patched_check.call_count, 6)
         patched_check.assert_called_with(databases=['default'])
 
