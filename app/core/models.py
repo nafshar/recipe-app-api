@@ -2,7 +2,7 @@
 Database models
 """
 from django.db import models
-from django.contrib.auth.models import  (
+from django.contrib.auth.models import (
      AbstractBaseUser,
      BaseUserManager,
      PermissionsMixin,
@@ -14,10 +14,11 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_field):
         """ Create, save & return a new user """
         user = self.model(email=email, **extra_field)
-        user.set_password(password) # this will also encrypt
-        user.save(using=self._db) # support for multiple DBs - in case only
+        user.set_password(password)  # this will also encrypt
+        user.save(using=self._db)  # support for multiple DBs - in case only
 
         return user
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     """ User in the system """
