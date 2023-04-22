@@ -13,6 +13,8 @@ class UserManager(BaseUserManager):
     """ Manager for Users """
     def create_user(self, email, password=None, **extra_field):
         """ Create, save & return a new user """
+        if not email:
+            raise ValueError('User must have an email address')
         user = self.model(email=self.normalize_email(email), **extra_field)
         user.set_password(password)  # this will also encrypt
         user.save(using=self._db)  # support for multiple DBs - in case only
