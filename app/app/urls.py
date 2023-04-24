@@ -19,7 +19,7 @@ from drf_spectacular.views import (
 )
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 
 urlpatterns = [
@@ -31,3 +31,4 @@ urlpatterns = [
         name='api-docs',
     )
 ]
+path('ap/user/', include('user.urls'))
