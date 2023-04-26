@@ -12,7 +12,7 @@ from recipe import serializers
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """ View for mane recipe APIs """
-    serializer_class = serializers.RecipeSerializer
+    serializer_class = serializers.RecipeDetailSerializer
     queryset = Recipe.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -20,3 +20,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """ Retrieve recipe for authenticated users """
         return self.queryset.filter(user=self.request.user).order_by('-id')
+
+    def get_serializer_class(self):
+        """ Return the serializer class for the 'list' request """
+        # When user request for list of recipes, 'action' is set to 'list'
+        # and we end up in this section of the code for 'get_serializer_class'
+        # otherwise we know there is a update/create/delete action which contains
+        # 'description', which will require the RecipeDetailSerializer, and that will
+        # not have a 'list' action and will be handles by the code in the body
+        # of the class.
+        if self.action == 'list':
+            # avoid the ending () to get a reference to the class
+            # not the object.
+            return serializers.RecipeSerializer
+
+        return self.serializer_class
