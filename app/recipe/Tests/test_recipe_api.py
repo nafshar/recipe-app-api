@@ -33,7 +33,7 @@ def create_recipe(user, **params):
         'time_minutes': 22,
         'price': Decimal('5.25'),
         'description': 'Sample Description',
-        'link': 'http://example.com/recipe.pdf',
+        'link': 'https://example.com/recipe.pdf',
     }
     defaults.update(params)
 
@@ -102,7 +102,7 @@ class PrivateRecipeAPItests(TestCase):
         self.assertEqual(res.data, serializer.data)
 
     def test_create_recipe(self):
-        """ Test createing a recipe through the API """
+        """ Test creating a recipe through the API """
         payload = {
             'title': 'Sample Recipe',
             'time_minutes': 30,
@@ -148,7 +148,7 @@ class PrivateRecipeAPItests(TestCase):
             'title': 'New recipe title',
             'link': 'https://example.com/new-recipe.pdf',
             'description': 'New recipe description',
-            'tim_minutes': 10,
+            'time_minutes': 10,
             'price': Decimal('2.50'),
         }
         url = detail_url(recipe.id)
