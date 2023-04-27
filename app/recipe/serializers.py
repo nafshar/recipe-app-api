@@ -9,13 +9,45 @@ from core.models import (
 )
 
 
+class TagSerializer(serializers.ModelSerializer):
+    """ Serializer for tags. """
+
+    class Meta:
+        model = Tag
+        fields = ['id', 'name']
+        read_only_fields = ['id']
+
+
 class RecipeSerializer(serializers.ModelSerializer):
     """ Serializer for recipes """
+    tags = TagSerializer(many=True, required=False)
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'time_minutes', 'price', 'link']
+        fields = ['id', 'title', 'time_minutes', 'price', 'link', 'tags']
         read_only_fields = ['id']
+
+    def create(self, validated_data):
+        """ Create a recipe. """
+        tags = validated_data.pop('tags', [])
+
+        # once the 'tags' are removed from validated_data, create a recipe
+        recipe = Recipe.objects.create(**validated_data)
+
+        # Since we are not in the 'vew', we need to get the user form the 'context'
+        # 'context' is passed to the serializer by the view whe using the serializer
+        # for the specific view
+        auth_user = self.context['request'].user
+
+        # 'get_or_create() is a helper method available for the ModelManager
+        for tag in tags:
+            tag_obj, created = Tag.objects.get_or_create(
+                user=auth_user,
+                **tag,
+            )
+            recipe.tags.add(tag_obj)
+
+        return recipe
 
 
 class RecipeDetailSerializer(RecipeSerializer):
@@ -24,11 +56,4 @@ class RecipeDetailSerializer(RecipeSerializer):
         fields = RecipeSerializer.Meta.fields + ['description']
 
 
-class TagSerializer(serializers.ModelSerializer):
-    """ Serializer for tags. """
-
-    class Meta:
-        model = Tag
-        fields = ['id', 'name']
-        read_only_fields = ['id']
 
