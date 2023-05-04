@@ -5,7 +5,10 @@ Views for the Recipe APIs
 from rest_framework import (
     viewsets,
     mixins,
+    status,
 )
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -36,16 +39,38 @@ class RecipeViewSet(viewsets.ModelViewSet):
         # 'description', which will require the RecipeDetailSerializer, and that will
         # not have a 'list' action and will be handles by the code in the body
         # of the class.
+        # Note: 'List' action is defined in ModelViewSet.
         if self.action == 'list':
             # avoid the ending () to get a reference to the class
             # not the object.
             return serializers.RecipeSerializer
+        # Note: 'upload_image' is not defined action in the
+        # ModelViewSet. We need to define it ourselves, in this class
+        elif self.action == 'upload_image':
+            return serializers.RecipeImageSerializer
 
         return self.serializer_class
 
     def perform_create(self, serializer):
         """ Create a new recipe. """
         serializer.save(user=self.request.user)
+
+    # In this method/acton, we are only accepting 'POST'
+    # detail=True ==> this action applies only to the deail
+    #                 portion of our ModelViewSet. 'detail'
+    #                 refers to a recipe with a specific id
+    # The custom url path = 'upload-image'
+    @action(methods=['POST'], detail=True, url_path='upload-image')
+    def upload_image(self, request, pk=None):
+        """ Upload an image to recipe. """
+        recipe = self.get_object()
+        serializer = self.get_serializer(recipe, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,  # To delete an ingredient
