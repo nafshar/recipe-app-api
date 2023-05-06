@@ -16,6 +16,7 @@ from recipe.serializers import TagSerializer
 
 TAGS_URL = reverse('recipe:tag-list')
 
+
 def detail_url(tag_id):
     """ Create and return a tag detail url. """
     return reverse('recipe:tag-detail', args=[tag_id])
@@ -114,7 +115,6 @@ class PrivateTagsApiTests(TestCase):
         self.assertIn(s1.data, res.data)
         self.assertNotIn(s2.data, res.data)
 
-
     def test_filtered_tags_unique(self):
         """ Test filtered tags return a unique list """
         tag = Tag.objects.create(user=self.user, name='Breakfast')
@@ -122,13 +122,13 @@ class PrivateTagsApiTests(TestCase):
         recipe1 = Recipe.objects.create(
             title='Pancakes',
             time_minutes=5,
-            price=Decimal('5:00'),
+            price=Decimal('5.00'),
             user=self.user,
         )
         recipe2 = Recipe.objects.create(
             title='Porridge',
             time_minutes=3,
-            price=Decimal('2:00'),
+            price=Decimal('2.00'),
             user=self.user,
         )
         recipe1.tags.add(tag)

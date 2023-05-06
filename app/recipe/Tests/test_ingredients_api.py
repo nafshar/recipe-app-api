@@ -54,7 +54,7 @@ class PrivateIngredientsApiTests(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(self.user)
 
-    def test_retriev_ingredients(self):
+    def test_retrieve_ingredients(self):
         """ Test retrieving a list of ingredients. """
         Ingredient.objects.create(user=self.user, name='Kale')
         Ingredient.objects.create(user=self.user, name='Vanilla')
@@ -105,7 +105,6 @@ class PrivateIngredientsApiTests(TestCase):
         ingredients = Ingredient.objects.filter(user=self.user)
         self.assertFalse(ingredients.exists())
 
-
     def test_filter_ingredients_assigned_to_recipes(self):
         """ Test listing ingredients by those assigned to recipes. """
         in1 = Ingredient.objects.create(user=self.user, name='Apples')
@@ -118,13 +117,12 @@ class PrivateIngredientsApiTests(TestCase):
         )
         recipe.ingredients.add(in1)
 
-        res = self.client.get(INGREDIENTS_URL, {'assigned+only': 1})
+        res = self.client.get(INGREDIENTS_URL, {'assigned_only': 1})
 
         s1 = IngredientSerializer(in1)
         s2 = IngredientSerializer(in2)
         self.assertIn(s1.data, res.data)
         self.assertNotIn(s2.data, res.data)
-
 
     def test_filtered_ingredients_unique(self):
         """ Test filtered ingredients returns a unique list. """
@@ -132,7 +130,7 @@ class PrivateIngredientsApiTests(TestCase):
         Ingredient.objects.create(user=self.user, name='Lentils')
         recipe1 = Recipe.objects.create(
             title='Eggs Benedict',
-            time_minues=60,
+            time_minutes=60,
             price=Decimal('7.00'),
             user=self.user,
         )
