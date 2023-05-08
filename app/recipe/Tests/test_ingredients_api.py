@@ -68,7 +68,7 @@ class PrivateIngredientsApiTests(TestCase):
 
     def test_ingredients_limited_to_user(self):
         """ Test list of ingredients is limited to authenticated user. """
-        user2 = create_user(email='user2@example.com')  #Un-auth
+        user2 = create_user(email='user2@example.com')  # Un-auth
         Ingredient.objects.create(user=user2, name='Salt')
 
         # This one is an Authenticated User creating an ingredient.
@@ -134,7 +134,7 @@ class PrivateIngredientsApiTests(TestCase):
             price=Decimal('7.00'),
             user=self.user,
         )
-        recipe2= Recipe.objects.create(
+        recipe2 = Recipe.objects.create(
             title='Herb Eggs',
             time_minutes=20,
             price=Decimal('4.00'),
@@ -149,17 +149,3 @@ class PrivateIngredientsApiTests(TestCase):
         res = self.client.get(INGREDIENTS_URL, {'assigned_only': 1})
 
         self.assertEqual(len(res.data), 1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-

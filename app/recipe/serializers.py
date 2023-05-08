@@ -46,9 +46,10 @@ class RecipeSerializer(serializers.ModelSerializer):
     def _get_or_create_tags(self, tags, recipe):
         """ handle getting or creating tags as needed """
 
-        # Since we are not in the 'vew', we need to get the user form the 'context'
-        # 'context' is passed to the serializer by the view whe using the serializer
-        # for the specific view
+        # Since we are not in the 'vew', we need to get the
+        # user form the 'context'. 'context' is passed to the
+        # serializer by the view whe using the serializer for
+        # the specific view.
         auth_user = self.context['request'].user
 
         # 'get_or_create() is a helper method available for the ModelManager

@@ -54,6 +54,7 @@ def create_recipe(user, **params):
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
 
+
 def create_user(**params):
     """ Create amd return a new user. """
     return get_user_model().objects.create_user(**params)
@@ -433,9 +434,6 @@ class PrivateRecipeAPItests(TestCase):
         self.assertNotIn(s3.data, res.data)
 
 
-
-
-
 class ImageUploadTests(TestCase):
     """ Tests for image upload API. """
     def setUp(self):
@@ -459,7 +457,7 @@ class ImageUploadTests(TestCase):
         # create temporary files/ Once the block is done, the temo
         # file is removed. By that time we have posted a copy of it.
         with tempfile.NamedTemporaryFile(suffix='.jpg') as image_file:
-            img = Image.new('RGB', (10,10))
+            img = Image.new('RGB', (10, 10))
             img.save(image_file, format='JPEG')
             # once the image is written, the file pointer will be at the end
             # of the image file. To upload it, we must seek back to the
@@ -482,17 +480,3 @@ class ImageUploadTests(TestCase):
         res = self.client.post(url, payload, format='multipart')
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-
-
-
-
-
-
-
-

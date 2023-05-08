@@ -77,11 +77,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         """ Return the serializer class for the 'list' request """
         # When user request for list of recipes, 'action' is set to 'list'
-        # and we end up in this section of the code for 'get_serializer_class'
-        # otherwise we know there is a update/create/delete action which contains
-        # 'description', which will require the RecipeDetailSerializer, and that will
-        # not have a 'list' action and will be handles by the code in the body
-        # of the class.
+        # and we end up in this section of the code for
+        # 'get_serializer_class'otherwise we know there is a
+        # update/create/delete action which contains 'description',
+        # which will require the RecipeDetailSerializer,
+        # and that will not have a 'list' action and will be handles by the
+        # code in the body of the class.
         # Note: 'List' action is defined in ModelViewSet.
         if self.action == 'list':
             # avoid the ending () to get a reference to the class
@@ -127,8 +128,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ]
     )
 )
-class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,  # To delete an ingredient
-                            mixins.UpdateModelMixin,   # To update an ingredient
+class BaseRecipeAttrViewSet(mixins.DestroyModelMixin,  # To del. an ingredient
+                            mixins.UpdateModelMixin,   # To upd. an ingredient
                             mixins.ListModelMixin,     # To list ingredients
                             viewsets.GenericViewSet):
     """ Base viewset for recipe attributes """
@@ -159,6 +160,3 @@ class IngredientViewSet(BaseRecipeAttrViewSet):
     """ Manage ingredients in the database. """
     serializer_class = serializers.IngredientSerializer
     queryset = Ingredient.objects.all()
-
-
-
